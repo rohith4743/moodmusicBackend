@@ -143,3 +143,5 @@ CORS_ALLOWED_ORIGINS = [
     "https://moodmusic-frontend.vercel.app"
     # Add other origins as needed
 ]
+
+ALLOWED_HOSTS = ['*']
