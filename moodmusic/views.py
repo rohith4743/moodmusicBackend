@@ -28,22 +28,22 @@ def register_user(request):
         user = MusicUser.objects.create_user(
             username=data['username'],
             email=data['email'],
-            password=data['password']
+            password=data['password'],
+            first_name = data["firstName"]
         )
-        return JsonResponse({'id': user.id}, status = 201)
+        return JsonResponse({'username': user.username}, status = 201)
 
 @csrf_exempt
 def login_user(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
         user = authenticate(
             username=data['username'],
             password=data['password']
         )
         if user is not None:
             login(request, user)
-            return JsonResponse({'id': user.id},status=200)
+            return JsonResponse({'username': str(user.username)},status=200)
         else:
             return JsonResponse({'error': 'Invalid credentials'}, status=400)
     
