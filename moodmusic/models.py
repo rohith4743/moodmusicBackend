@@ -8,6 +8,8 @@ import datetime
 class MusicUser(AbstractUser):
     # Add any additional fields here
     # For example: bio = models.TextField(blank=True)
+    username = models.TextField(primary_key=True)
+    # id = models.AutoField(primary_key=True)
     pass
 
 class SpotifyToken(models.Model):
