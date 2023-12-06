@@ -1,0 +1,43 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches: [ prod ]
+  pull_request:
+    branches: [ prod ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check Out Repo
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # Replace with the Python version you're using
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    # Uncomment and modify the following steps if you have tests
+    # - name: Run Tests
+    #   run: |
+    #     # Your commands to run tests
+
+    - name: Generate Deployment Package
+      run: zip -r package.zip . -x '*.git*'
+
+    - name: Deploy to AWS Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v18
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: MoodMusic  # Replace with your Elastic Beanstalk application name
+        environment_name: Moodmusic-env  # Replace with your Elastic Beanstalk environment name
+        region: us-east-1         # Replace with your AWS region
+        version_label: ${{ github.sha }}
+        deployment_package: package.zip
