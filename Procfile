@@ -1,1 +1,1 @@
-web: gunicorn moodmusic.wsgi:application
+web: gunicorn moodmusicbackend.wsgi:application
