@@ -154,7 +154,7 @@ def spotify_callback(request):
     # Save the token in the database
     SpotifyAccessToken.objects.create(access_token=data['access_token'], refresh_token=data['refresh_token'], expiry=expiry)
     # Redirect to a success page or the application main page
-    return redirect('http://localhost:4200')
+    return redirect('https://moodmusic-frontend.vercel.app')
 
 def get_access_token():
     # Assume there is only one token in the database for simplicity
