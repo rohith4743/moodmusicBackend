@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
+from moodmusicBackend.settings import AWS_ACCESS_KEY_ID, AWS_REGION, AWS_SECRET_ACCESS_KEY
 from .models import MusicUser
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import boto3
-from decouple import config
 
 # Create your views here.
 def index(request):
@@ -57,9 +58,9 @@ def detect_emotion(request):
             return JsonResponse({'error': 'No image provided'}, status=400)
 
         client = boto3.client('rekognition',
-                              aws_access_key_id=config('AWS_ACCESS_KEY_ID'),
-                              aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY'),
-                              region_name=config('AWS_REGION'))
+                              aws_access_key_id=AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                              region_name=AWS_REGION)
 
         response = client.detect_faces(
             Image={'Bytes': image_file.read()},

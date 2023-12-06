@@ -89,6 +89,7 @@ def recommend_music(request):
         try:
             recommendations = get_spotify_recommendations(mood)
             response = format_response_for_frontend(recommendations, get_access_token())
+            # print(response)
             return JsonResponse(response)
         except ValueError as e:
             return HttpResponseBadRequest(str(e))
@@ -169,7 +170,7 @@ def get_access_token():
             'refresh_token': token.refresh_token,
             'client_id': config('SPOTIFY_CLIENT_ID'),
         }
-        print(data)
+        # print(data)
         auth_header = base64.b64encode((config('SPOTIFY_CLIENT_ID') + ':' + config('SPOTIFY_CLIENT_SECRET')).encode('ascii')).decode('ascii')
         headers = {'Authorization': f'Basic {auth_header}', 'Content-Type': 'application/x-www-form-urlencoded'}
         response = requests.post(refresh_url, data=data, headers=headers)

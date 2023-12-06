@@ -16,6 +16,9 @@ from decouple import config
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 AWS_REGION = config('AWS_REGION')
+SPOTIFY_CLIENT_ID=config('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET=config('SPOTIFY_CLIENT_SECRET')
+SPOTIFY_REDIRECT_URI = config('SPOTIFY_REDIRECT_URI')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -137,5 +140,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'moodmusic.MusicUser' 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Angular's default port
+    "https://moodmusic-frontend.vercel.app"
     # Add other origins as needed
 ]
