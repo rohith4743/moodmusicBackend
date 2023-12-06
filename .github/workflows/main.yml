@@ -41,3 +41,4 @@ jobs:
         region: us-east-1         # Replace with your AWS region
         version_label: ${{ github.sha }}
         deployment_package: package.zip
+        use_existing_version_if_available: true
