@@ -141,14 +141,9 @@ AUTH_USER_MODEL = 'moodmusic.MusicUser'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Angular's default port
     "https://moodmusic-frontend.vercel.app",
-    "https://moodmusic-frontend.vercel.app/",
-    "https://moodmusic-frontend-rohith4743s-projects.vercel.app/",
     "https://moodmusic-frontend-rohith4743s-projects.vercel.app",
-    "https://moodmusic-frontend-git-main-rohith4743s-projects.vercel.app/",
     "https://moodmusic-frontend-git-main-rohith4743s-projects.vercel.app",
-    "https://moodmusic-frontend-39e3902jh-rohith4743s-projects.vercel.app/",
     "https://moodmusic-frontend-39e3902jh-rohith4743s-projects.vercel.app",
-    "https://moodmusic.rohithkankipati.com/",
     "https://moodmusic.rohithkankipati.com"
 ]
 
