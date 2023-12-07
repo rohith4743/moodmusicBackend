@@ -88,7 +88,10 @@ def recommend_music(request):
 
         try:
             recommendations = get_spotify_recommendations(mood)
-            response = format_response_for_frontend(recommendations, get_access_token())
+            headers = {
+                "Access-Control-Allow-Origin" : "*"
+            }
+            response = format_response_for_frontend(recommendations, get_access_token(), headers = headers)
             # print(response)
             return JsonResponse(response)
         except ValueError as e:
