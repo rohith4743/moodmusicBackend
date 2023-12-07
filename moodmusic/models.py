@@ -25,3 +25,13 @@ class SpotifyAccessToken(models.Model):
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
     expiry = models.DateTimeField()
+    
+
+class Profile(models.Model):
+    username = models.CharField(max_length=100, primary_key=True)
+    songs = models.JSONField(default=list)
+
+    def __str__(self):
+        return self.username
+
+    

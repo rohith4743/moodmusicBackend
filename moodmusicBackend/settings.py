@@ -149,4 +149,9 @@ AUTH_USER_MODEL = 'moodmusic.MusicUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+from corsheaders.defaults import default_headers
 ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True  # Or specify allowed origins
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Auth',
+]

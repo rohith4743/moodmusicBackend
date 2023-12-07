@@ -5,9 +5,13 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 import base64
-from .models import SpotifyAccessToken, SpotifyToken
+from django.contrib.auth import authenticate
+
+from moodmusic.serializers import ProfileSerializer
+from .models import Profile, SpotifyAccessToken, SpotifyToken
 import random
 import traceback; 
+import json
 
 MOOD_TO_ATTRIBUTES = {
     "SAD": {"target_valence": 0.2, "target_energy": 0.3, "target_tempo": 60},
@@ -34,7 +38,9 @@ MOOD_TO_GENRES = {
 
 
 def get_spotify_recommendations(mood):
-    access_token = fetch_spotify_token()
+    # access_token = fetch_spotify_token()
+    access_token = get_access_token()
+  
     mood_attributes = MOOD_TO_ATTRIBUTES.get(mood, {})
     if not mood_attributes:
         raise ValueError("Invalid mood")
@@ -48,7 +54,7 @@ def get_spotify_recommendations(mood):
     params = {
         "seed_genres": seed_genres,
         "limit": 10,
-        **mood_attributes  # Unpack mood-specific attributes
+        **mood_attributes  
     }
 
     response = requests.get("https://api.spotify.com/v1/recommendations", headers=headers, params=params)
@@ -161,10 +167,13 @@ def spotify_callback(request):
 
 def get_access_token():
     # Assume there is only one token in the database for simplicity
-    token = SpotifyAccessToken.objects.last()
+    # token = SpotifyAccessToken.objects.last()
+    token = SpotifyAccessToken.objects.order_by('expiry').last()
+
+    
     if not token:
         return JsonResponse({'error': 'No token available'}, status=404)
-
+  
     if token.expiry <= datetime.datetime.now(datetime.timezone.utc):
         # Token has expired, refresh it
         refresh_url = 'https://accounts.spotify.com/api/token'
@@ -185,10 +194,70 @@ def get_access_token():
             token.refresh_token = response_data["refresh_token"]
         token.expiry = datetime.datetime.now() + datetime.timedelta(seconds=response_data['expires_in'])
         token.save()
-
+        print(token.access_token)
     # Return the valid access token
     return token.access_token
 
 def access_token(request):
     access_token = get_access_token()
     return JsonResponse({"access_token" : access_token})
+
+@csrf_exempt
+def profileListView(request):
+    if request.method == 'GET':
+        print("sfsafs")
+        authentication_header = request.headers['auth']
+        print("fsa")
+        username , password = authentication_header.split(":")
+        print(username, password)
+        user = authenticate(username=username, password=password)
+        if user:
+            num = len(Profile.objects.filter(username=username))
+            
+            if num > 0:
+                profiles = Profile.objects.get(username=username)
+            
+            else:
+                profiles = Profile()
+                profiles.username = username
+                profiles.songs = []
+                profiles.save()
+            serializer = ProfileSerializer(profiles, many=False)
+            access_token = get_access_token()
+            data = {
+                "songs" : serializer.data["songs"],
+                "access_token" : access_token
+            }
+            return JsonResponse(data)
+        else:
+            return JsonResponse({"message": "Unauthorized"}, status=401)
+
+            
+        
+@csrf_exempt
+def addSongView(request):
+    
+    if request.method == 'POST':
+        authentication_header = request.headers["Auth"]
+        username , password = authentication_header.split(":")
+        user = authenticate(username=username, password=password)
+        if user:
+            
+            num = len(Profile.objects.filter(username=username))
+            if num > 0:
+                profiles = Profile.objects.get(username=username)
+            
+            else:
+                profiles = Profile()
+                profiles.username = username
+                profiles.songs = []
+            data = json.loads(request.body)
+            
+            song = data.get('song')
+            if song:
+                profiles.songs.append(song)
+                profiles.save()
+                return JsonResponse({"message": "Song added."}, status=200)
+            return JsonResponse({"message": "No song provided."}, status=400)
+        else:
+            return JsonResponse({"message": "Unauthorized"}, status=401)
