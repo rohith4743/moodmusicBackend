@@ -91,9 +91,9 @@ def recommend_music(request):
             headers = {
                 "Access-Control-Allow-Origin" : "*"
             }
-            response = format_response_for_frontend(recommendations, get_access_token(), headers = headers)
+            response = format_response_for_frontend(recommendations, get_access_token())
             # print(response)
-            return JsonResponse(response)
+            return JsonResponse(response, headers = headers)
         except ValueError as e:
             return HttpResponseBadRequest(str(e))
         except Exception as e:
