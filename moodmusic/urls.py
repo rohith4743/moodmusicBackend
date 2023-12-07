@@ -10,4 +10,6 @@ urlpatterns = [
     path("get_songs", recommendations.recommend_music, name='get_recommendations'),
     path('spotify_auth/', recommendations.spotify_auth, name='spotify_auth'),
     path('spotify_callback', recommendations.spotify_callback, name='spotify_callback'),
+    path('get_playlists', recommendations.profileListView, name="get_playlists"),
+    path('add_playlist', recommendations.addSongView, name="add_to_playlist")
 ]
