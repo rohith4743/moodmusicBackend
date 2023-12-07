@@ -138,13 +138,20 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'moodmusic.MusicUser' 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:4200",  # Angular's default port
-#     "https://moodmusic-frontend.vercel.app"
-#  
-#     # Add other origins as needed
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # Angular's default port
+    "https://moodmusic-frontend.vercel.app",
+    "https://moodmusic-frontend.vercel.app/",
+    "https://moodmusic-frontend-rohith4743s-projects.vercel.app/",
+    "https://moodmusic-frontend-rohith4743s-projects.vercel.app",
+    "https://moodmusic-frontend-git-main-rohith4743s-projects.vercel.app/",
+    "https://moodmusic-frontend-git-main-rohith4743s-projects.vercel.app",
+    "https://moodmusic-frontend-39e3902jh-rohith4743s-projects.vercel.app/",
+    "https://moodmusic-frontend-39e3902jh-rohith4743s-projects.vercel.app",
+    "https://moodmusic.rohithkankipati.com/",
+    "https://moodmusic.rohithkankipati.com"
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['*']
